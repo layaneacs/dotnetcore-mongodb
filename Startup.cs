@@ -10,6 +10,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+
+using dotnetcore.mongo.Database;
 
 namespace dotnetcore.mongo
 {
@@ -22,13 +25,21 @@ namespace dotnetcore.mongo
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
+        
         public void ConfigureServices(IServiceCollection services)
         {
+            //-- configuração do banco 
+            services.Configure<MongoDatabaseSettings>(Configuration.GetSection(nameof(MongoDatabaseSettings)));
+
+            /*A interface IMongoDatabaseSettings é registrada na DI com um tempo de vida do serviço singleton. 
+            Quando inserida, a instância da interface é resolvida para um objeto BookstoreDatabaseSettings.*/
+            services.AddSingleton<IMongoDatabaseSettings>(sp => 
+                sp.GetRequiredService<IOptions<MongoDatabaseSettings>>().Value);
+
             services.AddControllers();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
