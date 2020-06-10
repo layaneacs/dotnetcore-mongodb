@@ -18,5 +18,45 @@ namespace dotnetcore.mongo.Services
 
             _produtos = db.GetCollection<Produto>(settings.ProdutosCollectionName);
         }
-    }
+
+
+        // CRUD Produtos
+
+        //-- Listar produtos
+        public List<Produto> Get()
+        {
+            return _produtos.Find(produto => true).ToList();
+        }
+
+        //-- Obter Produto por id
+        public Produto Get(string id)
+        {
+            return _produtos.Find<Produto>(produto => produto.Id == id).FirstOrDefault();
+        }
+
+        //-- Criar Produto
+        public Produto Create(Produto produto){
+            _produtos.InsertOne(produto);
+            return produto;
+        }
+
+        //-- Update Produto
+        public void Update(string id, Produto produtoIn)
+        {
+            _produtos.ReplaceOne(produto=> produto.Id == id , produtoIn);
+        }
+
+        //-- Remove
+        public void Remove(Produto produtoIn)
+        {
+            _produtos.DeleteOne(produto => produto.Id == produtoIn.Id);
+        }
+
+        public void Remove(string id)
+        {
+            _produtos.DeleteOne(produto => produto.Id == id);
+        }
+            
+        
+    }    
 }

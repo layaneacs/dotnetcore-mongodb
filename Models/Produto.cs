@@ -8,7 +8,7 @@ namespace dotnetcore.mongo.Models
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
-        public int Id { get; set; }
+        public string Id { get; set; }
 
         [BsonElement("Produto")]
         public string ProdutoNome { get; set; }
