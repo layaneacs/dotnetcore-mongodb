@@ -13,6 +13,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 using dotnetcore.mongo.Database;
+using dotnetcore.mongo.Services;
 
 namespace dotnetcore.mongo
 {
@@ -35,6 +36,8 @@ namespace dotnetcore.mongo
             Quando inserida, a instância da interface é resolvida para um objeto BookstoreDatabaseSettings.*/
             services.AddSingleton<IMongoDatabaseSettings>(sp => 
                 sp.GetRequiredService<IOptions<MongoDatabaseSettings>>().Value);
+
+            services.AddSingleton<ProdutoService>();
 
             services.AddControllers();
         }
